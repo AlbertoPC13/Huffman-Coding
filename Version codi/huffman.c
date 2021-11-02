@@ -57,22 +57,27 @@ void imprimirCodigos(nodo arbolHuffman, char cadenaCodigos[], TIPO posicion, Cod
         //Codigos(cadenaCodigos, posicion);
     }
 }
-int adquirirNodos(nodo* nodos){
-    FILE *datos = fopen("repeticiones.bin","rb");
-    int numero, tam, i;
+/*
+    int adquirirNodos(nodo* nodos){
+    FILE *datos = fopen("repeticiones.txt", "r");
+    int tam, reps, i;
+    unsigned char byte;
 
-    fscanf(datos,"%d",&tam);
+    fscanf(datos, "%d", &tam);
+    printf("%d\n", tam);
 
-    nodos = (nodo*)malloc(tam*sizeof(nodo));
+    nodos = (nodo *)malloc(sizeof(nodo) * tam);
 
-    while (!feof(datos))
+    for (i = 0; !feof(datos); i++)
     {
-        fscanf(datos,"%d",numero);
-        nodos[i]->caracter = (unsigned char)numero;
-        fscanf(datos,"%d",numero);
-        nodos[i]->frecuencia = numero;
+        fscanf(datos, "%d", &byte);
+        fscanf(datos, "%d", &reps);
+        nodos[i] = crearNodo(byte,reps);
+        printf("%d - %d\n", byte, reps);
     }
+
     fclose(datos);
 
     return tam;
 }
+*/

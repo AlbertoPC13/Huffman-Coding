@@ -4,32 +4,31 @@ int main()
 {
     nodo arbolHuffman;
     nodo *nodos;
-    TIPO posicion = 0, capacidad = 0;
+    TIPO posicion = 0, capacidad = 0, reps = 0;
     char cadenaCodigos[TAMMAX];
+    unsigned char byte;
+
     int i;
 
-    FILE *datos = fopen("repeticiones.txt","rb");
-    int numero, tam, byte, reps;
+    FILE *datos = fopen("repeticiones.txt", "r");
 
-    fscanf(datos,"%d",&tam);
-    printf("%d\n",tam);
+    fscanf(datos, "%d", &capacidad);
+    printf("%d\n", capacidad);
 
-    nodos = (nodo *)malloc(sizeof(nodo) * tam);
+    nodos = (nodo *)malloc(sizeof(nodo) * capacidad);
 
-    i = 0;
-    while (!feof(datos))
+    for (i = 0; !feof(datos); i++)
     {
-        fscanf(datos,"%d",&byte);
-        nodos[i]->caracter = (unsigned char)byte;
-        fscanf(datos,"%d",&reps);
-        nodos[i]->frecuencia = reps;
-        printf("%d - %d\n",byte,reps);
-        i++;
+        fscanf(datos, "%d", &byte);
+        fscanf(datos, "%d", &reps);
+        nodos[i] = crearNodo(byte, reps);
+        printf("%d - %d\n", byte, reps);
     }
+
     fclose(datos);
 
-    //arbolHuffman = Huffman(nodos, tam);
-    /*printf("\nCaracter  codigo \n");
+    arbolHuffman = Huffman(nodos, capacidad);
+    printf("\nCaracter  codigo \n");
     Codigo codigos[256];
     for (i = 0; i < 256; i++)
         codigos[i].longitud = -1;
@@ -43,7 +42,7 @@ int main()
         {
             printf("%c - %s - %d\n", i, codigos[i].cadena, codigos[i].longitud);
         }
-    }*/
+    }
 
     return 0;
 }
