@@ -24,14 +24,14 @@ nodo Huffman(nodo *nodos, TIPO tam)
 }
 char* Codigos(char cadenaCodigos[], TIPO n)
 {
-    TIPO i;
+    int i;
     char* cadena=malloc(sizeof(char*)*n);
     for (i = 0; i < n; ++i)
         cadena[i]= cadenaCodigos[i];
     cadena[i]='\0';
     return cadena;
 }
-void imprimirCodigos(nodo arbolHuffman, char cadenaCodigos[], TIPO posicion, Codigo *codigos, int *tam)
+void imprimirCodigos(nodo arbolHuffman, char cadenaCodigos[], TIPO posicion, Codigo *codigos)
 {
     if(!arbolHuffman){
         perror("Recibe un nodo NULL o vacio imprimirCodigos(3)");
@@ -53,30 +53,26 @@ void imprimirCodigos(nodo arbolHuffman, char cadenaCodigos[], TIPO posicion, Cod
         codigos[arbolHuffman->caracter].cadena = (char *)malloc(sizeof(posicion));
         codigos[arbolHuffman->caracter].cadena = Codigos(cadenaCodigos, posicion);
         codigos[arbolHuffman->caracter].longitud = posicion;
-		tam+= posicion; 
         printf("%c %s\n", arbolHuffman->caracter,Codigos(cadenaCodigos, posicion));
         //Codigos(cadenaCodigos, posicion);
     }
 }
+int adquirirNodos(nodo* nodos){
+    FILE *datos = fopen("repeticiones.bin","rb");
+    int numero, tam, i;
 
-/* void crearCadenaCodigos(nodo arbolHuffman,char* cadenaCodigos[TAMMAX],char codigos[], TIPO posicion)
-{
-    if(!arbolHuffman){
-        perror("Recibe un nodo NULL o vacio crearCadenaCodigos(3)");
-        exit(-2);
-    }
-    if (arbolHuffman->izquierda)
+    fscanf(datos,"%d",&tam);
+
+    nodos = (nodo*)malloc(tam*sizeof(nodo));
+
+    while (!feof(datos))
     {
-        codigos[posicion] = '0';
-        crearCadenaCodigos(arbolHuffman->izquierda, cadenaCodigos, codigos,posicion + 1);
+        fscanf(datos,"%d",numero);
+        nodos[i]->caracter = (unsigned char)numero;
+        fscanf(datos,"%d",numero);
+        nodos[i]->frecuencia = numero;
     }
-    if (arbolHuffman->derecha)
-    {
-        codigos[posicion] = '1';
-        crearCadenaCodigos(arbolHuffman->derecha, cadenaCodigos, codigos, posicion + 1);
-    }
-    if (esHoja(arbolHuffman->izquierda, arbolHuffman->derecha))
-    {
-       strcpy(cadenaCodigos[arbolHuffman->caracter],codigos);
-    }
-} */
+    fclose(datos);
+
+    return tam;
+}
