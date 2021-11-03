@@ -17,7 +17,7 @@ int main(int argc, char const *argv[])
   long long int tamano_archivo = ftell(archivo);
   fseek(archivo, 0, SEEK_SET);
 
-  printf("Tamano de archivo original: %lld bytes", tamano_archivo);
+  printf("Tamano de archivo original: %lld bytes\n\n", tamano_archivo);
 
   unsigned char *datos = malloc(tamano_archivo);
   memset(datos, 0, tamano_archivo);
@@ -107,13 +107,12 @@ int main(int argc, char const *argv[])
   fseek(archcomp, 0, SEEK_END);
   tamano_archivo = ftell(archcomp);
 
-  printf("Nombre\t\tTam archivo bytes\t\tTam comprimido bytes\t\tTam comprimido bits\t\t Porcentaje");
+  printf("\nNombre\t\tTam archivo bytes\tTam comprimido bytes\tTam comprimido bits\t Porcentaje\n");
   printf("%s\t\t", nombre);
-  printf("%lld bytes\t", tam_original);
-  printf("%lld bytes\t", tamano_archivo);
-  printf("%lld bytes\t", tamano_archivo);
-  printf("%lld bits\t", tamano_archivo * 8);
-  printf("%f",)
+  printf("%lld bytes\t\t", tam_original);
+  printf("%lld bytes\t\t", tamano_archivo);
+  printf("%lld bits\t\t", tamano_archivo * 8);
+  printf("%.3f %%\n",(float)(100-((float)tamano_archivo*100/(float)tam_original)));
   fclose(archcomp);
   return 0;
 }
