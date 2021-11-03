@@ -3,9 +3,10 @@
 *.wav
 *.txt
 *.exe
-*.jpg*.txt
-*.exe
 *.jpg
+*.txt
+*.exe
+*.pdf
 *.dat
 *.iso
 Archivos
