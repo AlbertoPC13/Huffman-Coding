@@ -8,8 +8,12 @@ int main()
   //apcodigos* codigos;
   TIPO posicion = 0, capacidad = 0;
   char cadenaCodigos[TAMMAX];
+  char nombre[100];
 
-  FILE *archivo = fopen("inf.jpg", "rb");
+  //printf("Rola el nombre perro: ");
+  //scanf("%s",&nombre);
+
+  FILE *archivo = fopen(nombre, "rb");
 
   fseek(archivo, 0, SEEK_END);
   long tamano_archivo = ftell(archivo);
@@ -50,6 +54,7 @@ int main()
   FILE *cargar = fopen("repeticiones.txt", "w");
 
   int k = 0;
+  //fprintf(cargar,"%s ",nombre);
   fprintf(cargar,"%d ",capacidad);
   while (!esVacia(&pila))
   {
