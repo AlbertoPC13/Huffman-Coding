@@ -21,8 +21,6 @@ int main()
     FILE *datos = fopen("frecuencias.txt", "rb");
     fscanf(datos,"%s",nombre);
     fscanf(datos, "%d", &capacidad);
-    printf("%d\n", capacidad);
-    printf("%s\n",nombre);
 
     nodos = (nodo *)malloc(sizeof(nodo) * capacidad);
 
@@ -32,11 +30,13 @@ int main()
         fscanf(datos, "%d", &reps);
         tamProb += reps;
         nodos[i] = crearNodo(byte, reps);
-        printf("%d - %d\n", byte, reps);
     }
 
     fclose(datos);
 
+    printf("Nombre\t\t\tTam archivo\n");
+    printf("%-20s\t\t",nombre);
+    printf("%10d bytes\n",tamProb);
     arbolHuffman = Huffman(nodos, capacidad);
     FILE *archivo = fopen("codificacion.dat", "rb");
     FILE *nuevo = fopen(nombre, "wb");
@@ -60,8 +60,6 @@ int main()
             }
         }
     }
-
-    printf("\nArchivo descomprimido uwu");
 
     return 0;
 }
