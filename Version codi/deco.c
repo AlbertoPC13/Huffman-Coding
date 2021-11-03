@@ -11,35 +11,36 @@ int main()
     nodo *nodos;
     TIPO posicion = 0, capacidad = 0, reps = 0;
     char cadenaCodigos[TAMMAX];
+    char *nombre;
     unsigned char byte;
     long long int tamProb = 0;
 
     int i;
 
-    FILE *datos = fopen("repeticiones.txt", "r");
-
+    nombre = (char *)malloc(100 * sizeof(char));
+    FILE *datos = fopen("frecuencias.txt", "rb");
+    fscanf(datos,"%s",nombre);
     fscanf(datos, "%d", &capacidad);
     printf("%d\n", capacidad);
+    printf("%s\n",nombre);
 
     nodos = (nodo *)malloc(sizeof(nodo) * capacidad);
 
-    for (i = 0; !feof(datos); i++)
+    for (i = 0; i < capacidad; i++)
     {
         fscanf(datos, "%d", &byte);
         fscanf(datos, "%d", &reps);
         tamProb += reps;
         nodos[i] = crearNodo(byte, reps);
-        //printf("%d - %d\n", byte, reps);
+        printf("%d - %d\n", byte, reps);
     }
 
     fclose(datos);
 
     arbolHuffman = Huffman(nodos, capacidad);
-    
-    FILE *archivo = fopen("archivoComprimido.bin", "rb");
-    FILE *nuevo = fopen("nuevo.wav", "wb");
+    FILE *archivo = fopen("codificacion.dat", "rb");
+    FILE *nuevo = fopen(nombre, "wb");
     nodo temp=arbolHuffman;
-    
     while(tamProb){
         unsigned char aux = fgetc(archivo);
         for(i=7; i>=0;i--){
@@ -56,7 +57,6 @@ int main()
                 fwrite(&(temp->caracter),1,sizeof(temp->caracter),nuevo);
                 tamProb--;
                 temp = arbolHuffman;
-                //fwrite(&cadena, 1, sizeof(cadena), archivo);
             }
         }
     }

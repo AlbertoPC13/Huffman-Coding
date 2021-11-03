@@ -1,7 +1,7 @@
 #include "huffman.h"
 #include "pila.h"
 
-int main()
+int main(int argc, char const *argv[])
 {
   nodo arbolHuffman;
   nodo *nodos;
@@ -10,9 +10,8 @@ int main()
   char cadenaCodigos[TAMMAX];
   char nombre[100];
 
-  //printf("Rola el nombre perro: ");
-  //scanf("%s",&nombre);
-
+  strcpy(nombre, argv[1]);
+  
   FILE *archivo = fopen(nombre, "rb");
 
   fseek(archivo, 0, SEEK_END);
@@ -24,10 +23,9 @@ int main()
   fread(datos, 1, tamano_archivo, archivo);
   fclose(archivo);
 
-
   int cubetas[256];
   memset(cubetas, 0, 256 * sizeof(int));
-  int i,j;
+  int i, j;
 
   for (i = 0; i < tamano_archivo; i++)
   {
@@ -51,17 +49,17 @@ int main()
   capacidad = tamPila(&pila);
 
   nodos = (nodo *)malloc(sizeof(nodo) * capacidad);
-  FILE *cargar = fopen("repeticiones.txt", "w");
+  FILE *cargar = fopen("frecuencias.txt", "w");
 
   int k = 0;
-  //fprintf(cargar,"%s ",nombre);
-  fprintf(cargar,"%d ",capacidad);
+  fprintf(cargar, "copy-%s", nombre);
+  fprintf(cargar, "\n%d ", capacidad);
   while (!esVacia(&pila))
   {
     nodos[k] = crearNodo(pila.datos[pila.tope].byte, pila.datos[pila.tope].reps);
     printf("\n%d - %d", pila.datos[pila.tope].byte, pila.datos[pila.tope].reps);
-    fprintf(cargar,"%d %d ",pila.datos[pila.tope].byte,pila.datos[pila.tope].reps);
-    Pop(&pila); 
+    fprintf(cargar, "\n%d %d", pila.datos[pila.tope].byte, pila.datos[pila.tope].reps);
+    Pop(&pila);
     k++;
   }
 
@@ -78,51 +76,46 @@ int main()
   printf("\n\n");
   for (i = 0; i < 256; i++)
   {
-    if(codigos[i].longitud != -1)
+    if (codigos[i].longitud != -1)
     {
-        printf("%c - %s - %d\n",i,codigos[i].cadena,codigos[i].longitud);
+      printf("%c - %s - %d\n", i, codigos[i].cadena, codigos[i].longitud);
     }
   }
-  
-  
+
   /*Haciendo la compresion del archivo*/
   int cont = 8;
   unsigned char res = 0;
-  FILE *archcomp = fopen("archivoComprimido.bin", "wb");
-  
-  for(i = 0; i<tamano_archivo; i++)//For para recorrer el archivo
+  FILE *archcomp = fopen("codificacion.dat", "wb");
+
+  for (i = 0; i < tamano_archivo; i++) //For para recorrer el archivo
   {
-  	
-  	int tam = codigos[datos[i]].longitud;
- 	char *cadena = codigos[datos[i]].cadena;
-  	
-  		for(j = 0; j<tam; j++)
-		{
-			if(cadena[j] == '1')
-				res += 1<<(cont - 1);
-			
-			cont--;
-			
-			if(cont == 0)
-			{
-				cont = 8;
-				//Se va al archivo
-				fputc(res, archcomp);
-				res = 0;	
-			}
-					
-		}
+
+    int tam = codigos[datos[i]].longitud;
+    char *cadena = codigos[datos[i]].cadena;
+
+    for (j = 0; j < tam; j++)
+    {
+      if (cadena[j] == '1')
+        res += 1 << (cont - 1);
+
+      cont--;
+
+      if (cont == 0)
+      {
+        cont = 8;
+        //Se va al archivo
+        fputc(res, archcomp);
+        res = 0;
+      }
+    }
   }
-  
-  if(cont != 8)
-  	fputc(res, archcomp);
-  
+
+  if (cont != 8)
+    fputc(res, archcomp);
+
   fclose(archcomp);
   return 0;
-  
-  
-  
-  
+
   /* HuffmanCodes(arbolHuffman, codigos);
 
     printf("\n%c",codigos[1]->caracter); */
