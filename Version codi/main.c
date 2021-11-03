@@ -5,18 +5,19 @@ int main(int argc, char const *argv[])
 {
   nodo arbolHuffman;
   nodo *nodos;
-  //apcodigos* codigos;
   TIPO posicion = 0, capacidad = 0;
   char cadenaCodigos[TAMMAX];
   char nombre[100];
 
   strcpy(nombre, argv[1]);
-  
+
   FILE *archivo = fopen(nombre, "rb");
 
   fseek(archivo, 0, SEEK_END);
-  long tamano_archivo = ftell(archivo);
+  long long int tamano_archivo = ftell(archivo);
   fseek(archivo, 0, SEEK_SET);
+
+  printf("Tamano de archivo original: %lld bytes", tamano_archivo);
 
   unsigned char *datos = malloc(tamano_archivo);
   memset(datos, 0, tamano_archivo);
@@ -57,7 +58,6 @@ int main(int argc, char const *argv[])
   while (!esVacia(&pila))
   {
     nodos[k] = crearNodo(pila.datos[pila.tope].byte, pila.datos[pila.tope].reps);
-    printf("\n%d - %d", pila.datos[pila.tope].byte, pila.datos[pila.tope].reps);
     fprintf(cargar, "\n%d %d", pila.datos[pila.tope].byte, pila.datos[pila.tope].reps);
     Pop(&pila);
     k++;
@@ -66,21 +66,11 @@ int main(int argc, char const *argv[])
   fclose(cargar);
 
   arbolHuffman = Huffman(nodos, capacidad);
-  printf("\nCaracter  codigo \n");
   Codigo codigos[256];
   for (i = 0; i < 256; i++)
     codigos[i].longitud = -1;
 
   imprimirCodigos(arbolHuffman, cadenaCodigos, posicion, codigos);
-
-  printf("\n\n");
-  for (i = 0; i < 256; i++)
-  {
-    if (codigos[i].longitud != -1)
-    {
-      printf("%c - %s - %d\n", i, codigos[i].cadena, codigos[i].longitud);
-    }
-  }
 
   /*Haciendo la compresion del archivo*/
   int cont = 8;
@@ -112,21 +102,17 @@ int main(int argc, char const *argv[])
 
   if (cont != 8)
     fputc(res, archcomp);
+  
 
+  printf("Nombre\t\tTam archivo bytes\t\tTam comprimido bytes\t\tTam comprimido bits\t\t Porcentaje");
+  printf("%s\t\t",nombre);
+  printf("%lld bytes\t",tamano_archivo);
+  fseek(archcomp, 0, SEEK_END);
+  tamano_archivo = ftell(archcomp);
+  printf("%lld bytes\t",tamano_archivo);
+  printf("%lld bytes\t",tamano_archivo);
+  printf("%lld bits\t",tamano_archivo*8);
+  printf("%d\t",tamano_archivo*8);
   fclose(archcomp);
   return 0;
-
-  /* HuffmanCodes(arbolHuffman, codigos);
-
-    printf("\n%c",codigos[1]->caracter); */
-  /*
-  a   0
-  c   100
-  b   101
-  f   1100        
-  e   1101        
-  d   111
-
-  char [255]   
- */
 }

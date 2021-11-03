@@ -44,40 +44,13 @@ void imprimirCodigos(nodo arbolHuffman, char cadenaCodigos[], TIPO posicion, Cod
     }
     if (arbolHuffman->derecha)
     {
-        cadenaCodigos[posicion] = '1'; // 11001
+        cadenaCodigos[posicion] = '1'; 
         imprimirCodigos(arbolHuffman->derecha, cadenaCodigos, posicion + 1, codigos);
     }
     if (esHoja(arbolHuffman->izquierda, arbolHuffman->derecha))
     {
-        //11001
         codigos[arbolHuffman->caracter].cadena = (char *)malloc(sizeof(posicion));
         codigos[arbolHuffman->caracter].cadena = Codigos(cadenaCodigos, posicion);
         codigos[arbolHuffman->caracter].longitud = posicion;
-        printf("%c %s\n", arbolHuffman->caracter,Codigos(cadenaCodigos, posicion));
-        //Codigos(cadenaCodigos, posicion);
     }
 }
-/*
-    int adquirirNodos(nodo* nodos){
-    FILE *datos = fopen("repeticiones.txt", "r");
-    int tam, reps, i;
-    unsigned char byte;
-
-    fscanf(datos, "%d", &tam);
-    printf("%d\n", tam);
-
-    nodos = (nodo *)malloc(sizeof(nodo) * tam);
-
-    for (i = 0; !feof(datos); i++)
-    {
-        fscanf(datos, "%d", &byte);
-        fscanf(datos, "%d", &reps);
-        nodos[i] = crearNodo(byte,reps);
-        printf("%d - %d\n", byte, reps);
-    }
-
-    fclose(datos);
-
-    return tam;
-}
-*/
