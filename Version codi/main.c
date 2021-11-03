@@ -102,17 +102,18 @@ int main(int argc, char const *argv[])
 
   if (cont != 8)
     fputc(res, archcomp);
-  
 
-  printf("Nombre\t\tTam archivo bytes\t\tTam comprimido bytes\t\tTam comprimido bits\t\t Porcentaje");
-  printf("%s\t\t",nombre);
-  printf("%lld bytes\t",tamano_archivo);
+  int tam_original=tamano_archivo;
   fseek(archcomp, 0, SEEK_END);
   tamano_archivo = ftell(archcomp);
-  printf("%lld bytes\t",tamano_archivo);
-  printf("%lld bytes\t",tamano_archivo);
-  printf("%lld bits\t",tamano_archivo*8);
-  printf("%d\t",tamano_archivo*8);
+
+  printf("Nombre\t\tTam archivo bytes\t\tTam comprimido bytes\t\tTam comprimido bits\t\t Porcentaje");
+  printf("%s\t\t", nombre);
+  printf("%lld bytes\t", tam_original);
+  printf("%lld bytes\t", tamano_archivo);
+  printf("%lld bytes\t", tamano_archivo);
+  printf("%lld bits\t", tamano_archivo * 8);
+  printf("%f",)
   fclose(archcomp);
   return 0;
 }
