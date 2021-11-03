@@ -1,6 +1,5 @@
 #include "colaprioridad.h"
 #include <string.h>
-
 #define TAMMAX 60
 
 typedef struct Codigo
