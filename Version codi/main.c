@@ -1,29 +1,32 @@
 #include "huffman.h"
 #include "pila.h"
 
-int main()
+int main(int argc, char const *argv[])
 {
   nodo arbolHuffman;
   nodo *nodos;
-  //apcodigos* codigos;
   TIPO posicion = 0, capacidad = 0;
   char cadenaCodigos[TAMMAX];
+  char nombre[100];
 
-  FILE *archivo = fopen("Sonidero_mezcla.wav", "rb");
+  strcpy(nombre, argv[1]);
+
+  FILE *archivo = fopen(nombre, "rb");
 
   fseek(archivo, 0, SEEK_END);
-  long tamano_archivo = ftell(archivo);
+  long long int tamano_archivo = ftell(archivo);
   fseek(archivo, 0, SEEK_SET);
+
+  printf("Tamano de archivo original: %lld bytes\n\n", tamano_archivo);
 
   unsigned char *datos = malloc(tamano_archivo);
   memset(datos, 0, tamano_archivo);
   fread(datos, 1, tamano_archivo, archivo);
   fclose(archivo);
 
-
   int cubetas[256];
   memset(cubetas, 0, 256 * sizeof(int));
-  int i,j;
+  int i, j;
 
   for (i = 0; i < tamano_archivo; i++)
   {
@@ -47,88 +50,67 @@ int main()
   capacidad = tamPila(&pila);
 
   nodos = (nodo *)malloc(sizeof(nodo) * capacidad);
-  FILE *cargar = fopen("repeticiones.bin", "wb");
+  FILE *cargar = fopen("frecuencias.txt", "w");
 
   int k = 0;
-  fprintf(cargar,"%d\n",capacidad);
+  fprintf(cargar, "copy-%s", nombre);
+  fprintf(cargar, "\n%d ", capacidad);
   while (!esVacia(&pila))
   {
     nodos[k] = crearNodo(pila.datos[pila.tope].byte, pila.datos[pila.tope].reps);
-    printf("\n%d - %d", pila.datos[pila.tope].byte, pila.datos[pila.tope].reps);
-    fprintf(cargar,"%d-%d\n",pila.datos[pila.tope].byte,pila.datos[pila.tope].reps);
-    Pop(&pila); 
+    fprintf(cargar, "\n%d %d", pila.datos[pila.tope].byte, pila.datos[pila.tope].reps);
+    Pop(&pila);
     k++;
   }
 
   fclose(cargar);
 
   arbolHuffman = Huffman(nodos, capacidad);
-  printf("\nCaracter  codigo \n");
   Codigo codigos[256];
   for (i = 0; i < 256; i++)
     codigos[i].longitud = -1;
 
   imprimirCodigos(arbolHuffman, cadenaCodigos, posicion, codigos);
 
-  printf("\n\n");
-  for (i = 0; i < 256; i++)
+  /*Haciendo la compresion del archivo*/
+  int cont = 8; //Variable para contar grupos de 8 bits
+  unsigned char res = 0; // Variable para almacenar el resultado de un byte
+  FILE *archcomp = fopen("codificacion.dat", "wb"); //Abre el archivo codificacion y escribe en bytes
+
+  for (i = 0; i < tamano_archivo; i++) //For para recorrer el archivo
   {
-    if(codigos[i].longitud != -1)
+    int tam = codigos[datos[i]].longitud; //Se obtiene el tamanio de la cadena asiganda a cada byte
+    char *cadena = codigos[datos[i]].cadena; //Se obtiene la cadena
+
+    for (j = 0; j < tam; j++)//El for se realziara hasta acabar con el tamanio de la cadena asignada
     {
-        printf("%c - %s - %d\n",i,codigos[i].cadena,codigos[i].longitud);
+      if (cadena[j] == '1') //Si encuentra un 1, se realiza un corrimiento a la izqueirda del contador - 1
+        res += 1 << (cont - 1); //Se realiza el corrimiento y se guarda en la varable res
+
+      cont--; //Se decremena el contador
+
+      if (cont == 0) // Si el contrador llega a 0, lo inicializamos de nuevo a 8
+      {
+        cont = 8;//Incializamos cont a 8
+        fputc(res, archcomp); //Se escribe en el archivo en forma de caracter el resultado
+        res = 0; //Inicialimos de nuevo res en 0 
+      }
     }
   }
-  
-  
-  /*Haciendo la compresion del archivo*/
-  int cont = 8;
-  unsigned char res = 0;
-  FILE *archcomp = fopen("archivoComprimido.bin", "wb");
-  
-  for(i = 0; i<tamano_archivo; i++)//For para recorrer el archivo
-  {
-  	
-  	int tam = codigos[datos[i]].longitud;
- 	char *cadena = codigos[datos[i]].cadena;
-  	
-  		for(j = 0; j<tam; j++)
-		{
-			if(cadena[j] == '1')
-				res += 1<<(cont - 1);
-			
-			cont--;
-			
-			if(cont == 0)
-			{
-				cont = 8;
-				//Se va al archivo
-				fputc(res, archcomp);
-				res = 0;	
-			}
-					
-		}
-  }
-  
-  if(cont != 8)
-  	fputc(res, archcomp);
-  
+
+  if (cont != 8) //Si no se completo el byte, se copleta con relleno 
+    fputc(res, archcomp); //Se escribe en el archivo en forma de caracter el resultado
+
+  int tam_original=tamano_archivo;
+  fseek(archcomp, 0, SEEK_END);
+  tamano_archivo = ftell(archcomp);
+
+  printf("\nNombre\t\tTam archivo bytes\tTam comprimido bytes\tTam comprimido bits\t Porcentaje\n");
+  printf("%s\t\t", nombre);
+  printf("%lld bytes\t\t", tam_original);
+  printf("%lld bytes\t\t", tamano_archivo);
+  printf("%lld bits\t\t", tamano_archivo * 8);
+  printf("%.3f %%\n",(float)(100-((float)tamano_archivo*100/(float)tam_original)));
   fclose(archcomp);
   return 0;
-  
-  
-  
-  
-  /* HuffmanCodes(arbolHuffman, codigos);
-
-    printf("\n%c",codigos[1]->caracter); */
-  /*
-  a   0
-  c   100
-  b   101
-  f   1100        
-  e   1101        
-  d   111
-
-  char [255]   
- */
 }
