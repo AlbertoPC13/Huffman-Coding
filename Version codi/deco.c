@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "tiempo.h"
+//#include "tiempo.h"
 #include "huffman.h"
 #define PESOBIT(bpos) 1<<bpos
 #define CONSULTARBIT(var,bpos) (*(unsigned*)&var & PESOBIT(bpos))?1:0
