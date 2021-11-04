@@ -5,6 +5,7 @@
 #define PONE_1(var, bpos) (*(unsigned *)&var |= PESOBIT(bpos))
 #define PONE_0(var, bpos) (*(unsigned *)&var &= ~(PESOBIT(bpos)))
 #define CAMBIA(var, bpos) (*(unsigned *)&var ^= PESOBIT(bpos))
+
 int main()
 {
   nodo arbolHuffman;
