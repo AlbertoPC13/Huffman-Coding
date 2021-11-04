@@ -26,7 +26,7 @@ int main(int argc, char const *argv[])
   //Se posiciona de nuevo en la posicion 0
   fseek(archivo, 0, SEEK_SET);
 
-  printf("Tamano de archivo original: %lld bytes\n\n", tamano_archivo);
+  printf("Tamano de archivo original: %lld bytes\n", tamano_archivo);
 
   //Se crea un arreglo del tamano del archivo para almacenar sus bytes
   unsigned char *datos = malloc(tamano_archivo);
@@ -144,7 +144,7 @@ int main(int argc, char const *argv[])
 	printf("%.10e\t",  wtime1 - wtime0);
 	printf("%.10e\t",  utime1 - utime0);
 	printf("%.10e\t",  stime1 - stime0);
-	printf("%.10f %%\t\n",100.0 * (utime1 - utime0 + stime1 - stime0) / (wtime1 - wtime0));
+	printf("%.10f %%\t\n\n",100.0 * (utime1 - utime0 + stime1 - stime0) / (wtime1 - wtime0));
   
   return 0;
 }

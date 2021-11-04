@@ -86,7 +86,7 @@ int main()
 	printf("%.10e\t",  wtime1 - wtime0);
 	printf("%.10e\t",  utime1 - utime0);
 	printf("%.10e\t",  stime1 - stime0);
-	printf("%.10f %%\t\n",100.0 * (utime1 - utime0 + stime1 - stime0) / (wtime1 - wtime0));
+	printf("%.10f %%\t\n\n",100.0 * (utime1 - utime0 + stime1 - stime0) / (wtime1 - wtime0));
 
     return 0;
 }
