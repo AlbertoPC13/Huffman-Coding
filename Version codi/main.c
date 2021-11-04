@@ -73,35 +73,33 @@ int main(int argc, char const *argv[])
   imprimirCodigos(arbolHuffman, cadenaCodigos, posicion, codigos);
 
   /*Haciendo la compresion del archivo*/
-  int cont = 8;
-  unsigned char res = 0;
-  FILE *archcomp = fopen("codificacion.dat", "wb");
+  int cont = 8; //Variable para contar grupos de 8 bits
+  unsigned char res = 0; // Variable para almacenar el resultado de un byte
+  FILE *archcomp = fopen("codificacion.dat", "wb"); //Abre el archivo codificacion y escribe en bytes
 
   for (i = 0; i < tamano_archivo; i++) //For para recorrer el archivo
   {
+    int tam = codigos[datos[i]].longitud; //Se obtiene el tamanio de la cadena asiganda a cada byte
+    char *cadena = codigos[datos[i]].cadena; //Se obtiene la cadena
 
-    int tam = codigos[datos[i]].longitud;
-    char *cadena = codigos[datos[i]].cadena;
-
-    for (j = 0; j < tam; j++)
+    for (j = 0; j < tam; j++)//El for se realziara hasta acabar con el tamanio de la cadena asignada
     {
-      if (cadena[j] == '1')
-        res += 1 << (cont - 1);
+      if (cadena[j] == '1') //Si encuentra un 1, se realiza un corrimiento a la izqueirda del contador - 1
+        res += 1 << (cont - 1); //Se realiza el corrimiento y se guarda en la varable res
 
-      cont--;
+      cont--; //Se decremena el contador
 
-      if (cont == 0)
+      if (cont == 0) // Si el contrador llega a 0, lo inicializamos de nuevo a 8
       {
-        cont = 8;
-        //Se va al archivo
-        fputc(res, archcomp);
-        res = 0;
+        cont = 8;//Incializamos cont a 8
+        fputc(res, archcomp); //Se escribe en el archivo en forma de caracter el resultado
+        res = 0; //Inicialimos de nuevo res en 0 
       }
     }
   }
 
-  if (cont != 8)
-    fputc(res, archcomp);
+  if (cont != 8) //Si no se completo el byte, se copleta con relleno 
+    fputc(res, archcomp); //Se escribe en el archivo en forma de caracter el resultado
 
   int tam_original=tamano_archivo;
   fseek(archcomp, 0, SEEK_END);
