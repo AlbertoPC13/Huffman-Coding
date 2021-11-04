@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "tiempo.h"
 #include "huffman.h"
 #define PESOBIT(bpos) 1<<bpos
 #define CONSULTARBIT(var,bpos) (*(unsigned*)&var & PESOBIT(bpos))?1:0
@@ -13,6 +17,8 @@ Parametros: Ninguno
 */
 int main()
 {
+    double sumwtime, utime0, stime0, wtime0,utime1, stime1, wtime1; //Variables para medición de tiempos
+    uswtime(&utime0, &stime0, &wtime0);//Inicia el conteo
     //Declaracion e inicializacion de variables
     nodo arbolHuffman;
     nodo *nodos;
@@ -67,6 +73,16 @@ int main()
             }
         }
     }
+
+    fclose(archivo);//Cerramos el archivo
+    fclose(nuevo);//Cerramos el archivo
+    
+    uswtime(&utime1, &stime1, &wtime1);//Evalua los tiempos de ejecucion
+    printf("\nreal (Tiempo total)\t user(Tiempo CPU)\t sys (Tiempo E/S)\t CPU/Wall\n");
+	printf("%.10e\t",  wtime1 - wtime0);
+	printf("%.10e\t",  utime1 - utime0);
+	printf("%.10e\t",  stime1 - stime0);
+	printf("%.10f %%\t\n",100.0 * (utime1 - utime0 + stime1 - stime0) / (wtime1 - wtime0));
 
     return 0;
 }
