@@ -4,11 +4,14 @@
 *.txt
 *.exe
 *.jpg
-*.txt
-*.exe
 *.pdf
 *.dat
 *.iso
 *.mp4
+*.out
+*.pptx
+*.png
+*.docx
+*.xlsx
 Archivos
 Version codi/codificacion.dat
