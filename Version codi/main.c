@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include "tiempo.h"
+#include "tiempo.h"
 #include "huffman.h"
 #include "pila.h"
 
 int main(int argc, char const *argv[])
 {
-  /*double sumwtime, utime0, stime0, wtime0,utime1, stime1, wtime1; //Variables para medición de tiempos
-  uswtime(&utime0, &stime0, &wtime0);//Inicia el conteo*/
+  double sumwtime, utime0, stime0, wtime0,utime1, stime1, wtime1; //Variables para medición de tiempos
+  uswtime(&utime0, &stime0, &wtime0);//Inicia el conteo
   nodo arbolHuffman;
   nodo *nodos;
   TIPO posicion = 0, capacidad = 0;
@@ -139,12 +139,12 @@ int main(int argc, char const *argv[])
   printf("%.3f %%\n", (float)(100 - ((float)tamano_archivo * 100 / (float)tam_original)));
   fclose(archcomp);
 
-  /*uswtime(&utime1, &stime1, &wtime1);//Evalua los tiempos de ejecucion
+  uswtime(&utime1, &stime1, &wtime1);//Evalua los tiempos de ejecucion
   printf("\nreal (Tiempo total)\t user(Tiempo CPU)\t sys (Tiempo E/S)\t CPU/Wall\n");
 	printf("%.10e\t",  wtime1 - wtime0);
 	printf("%.10e\t",  utime1 - utime0);
 	printf("%.10e\t",  stime1 - stime0);
-	printf("%.10f %%\t\n",100.0 * (utime1 - utime0 + stime1 - stime0) / (wtime1 - wtime0));*/
+	printf("%.10f %%\t\n",100.0 * (utime1 - utime0 + stime1 - stime0) / (wtime1 - wtime0));
   
   return 0;
 }
