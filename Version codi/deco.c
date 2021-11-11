@@ -72,10 +72,11 @@ int main()
             if(esHoja(temp->izquierda,temp->derecha)) //Revisa si ya llegamos a una hoja o caracter
             {
                 fwrite(&(temp->caracter),1,sizeof(temp->caracter),nuevo);//Escribe en el archivo el caracter encontrado
-                tamProb--;//Disminuye el tamanio de problema
+                
                 temp = arbolHuffman;//Se le asigna a temp la raiz del arbol
             }
         }
+        tamProb--;//Disminuye el tamanio de problema
     }
 
     fclose(archivo);//Cerramos el archivo
